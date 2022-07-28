@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "21179710657",
+    "project_id": "drone-tech-581d2",
+    "storage_bucket": "drone-tech-581d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21179710657:android:8fb5f90304a5c3662d2840",
+        "android_client_info": {
+          "package_name": "com.dronetech.dronetech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21179710657-n4lgsaah6br9pfgin6a50kcudvqmq272.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzA4Y7QC0WxYKEuXm3z63OpmBwZnZcJuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21179710657-n4lgsaah6br9pfgin6a50kcudvqmq272.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
