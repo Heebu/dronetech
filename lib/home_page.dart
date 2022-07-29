@@ -17,10 +17,189 @@ class _MyHomePageState extends State<MyHomePage> {
   late final CollectionReference _Classifications =
       FirebaseFirestore.instance.collection('Classifications');
 
-  //firebase operations
-  //await _details.add({'});
-  //await _details.update({'});
-  //await _details.doc({'});
+  final TextEditingController _tagController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _healthController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _manufacturerController = TextEditingController();
+
+  //update
+  Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _tagController.text = documentSnapshot['tag'];
+      _manufacturerController.text = documentSnapshot['manufacturer'];
+      _healthController.text = documentSnapshot['health'];
+      _weightController.text = documentSnapshot['weight'];
+      _dateController.text = documentSnapshot['date'];
+      _imageController.text = documentSnapshot['imageLink'];
+    }
+    //show bottom sheet
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+              top: 20,
+              right: 20,
+              left: 20,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _tagController,
+                  decoration: const InputDecoration(labelText: 'Tag'),
+                ),
+                TextField(
+                  controller: _manufacturerController,
+                  decoration: const InputDecoration(labelText: 'Manufacturer'),
+                ),
+                TextField(
+                  controller: _weightController,
+                  decoration: const InputDecoration(labelText: 'Weight'),
+                ),
+                TextField(
+                  controller: _healthController,
+                  decoration: const InputDecoration(labelText: 'Condition'),
+                ),
+                TextField(
+                  controller: _dateController,
+                  decoration: const InputDecoration(labelText: 'Date'),
+                ),
+                TextField(
+                  controller: _imageController,
+                  decoration: const InputDecoration(labelText: 'Image Link'),
+                ),
+                SizedBox(
+                  height: Dimensions.sizedBoxHeight20,
+                ),
+
+                //edit button
+                ElevatedButton(
+                  child: const Text('Update'),
+                  onPressed: () async {
+                    final String tag = _tagController.text;
+                    final String manufacturer = _manufacturerController.text;
+                    final String weight = _weightController.text;
+                    final String condition = _healthController.text;
+                    final String date = _dateController.text;
+                    final String image = _imageController.text;
+
+                    if (image != null) {
+                      await _details.doc(documentSnapshot!.id).update({
+                        'tag': tag,
+                        'manufacturer': manufacturer,
+                        'weight': weight,
+                        'health': condition,
+                        'date': date,
+                        'imageLink': image,
+                      });
+                      _tagController.text = '';
+                      _manufacturerController.text = '';
+                      _weightController.text = '';
+                      _healthController.text = '';
+                      _dateController.text = '';
+                      _imageController.text = '';
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  //create
+  Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _tagController.text = documentSnapshot['tag'];
+      _manufacturerController.text = documentSnapshot['manufacturer'];
+      _healthController.text = documentSnapshot['health'];
+      _weightController.text = documentSnapshot['weight'];
+      _dateController.text = documentSnapshot['date'];
+      _imageController.text = documentSnapshot['imageLink'];
+    }
+
+    //show bottom sheet
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+              top: 20,
+              right: 20,
+              left: 20,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _tagController,
+                  decoration: const InputDecoration(labelText: 'Tag'),
+                ),
+                TextField(
+                  controller: _manufacturerController,
+                  decoration: const InputDecoration(labelText: 'Manufacturer'),
+                ),
+                TextField(
+                  controller: _weightController,
+                  decoration: const InputDecoration(labelText: 'Weight'),
+                ),
+                TextField(
+                  controller: _healthController,
+                  decoration: const InputDecoration(labelText: 'Condition'),
+                ),
+                TextField(
+                  controller: _dateController,
+                  decoration: const InputDecoration(labelText: 'Date'),
+                ),
+                TextField(
+                  controller: _imageController,
+                  decoration: const InputDecoration(labelText: 'Image Link'),
+                ),
+                SizedBox(
+                  height: Dimensions.sizedBoxHeight20,
+                ),
+                //Create Button
+                ElevatedButton(
+                    child: const Text('Create'),
+                    onPressed: () async {
+                      final String tag = _tagController.text;
+                      final String manufacturer = _manufacturerController.text;
+                      final String weight = _weightController.text;
+                      final String condition = _healthController.text;
+                      final String date = _dateController.text;
+                      final String image = _imageController.text;
+
+                      if (image != null) {
+                        await _details.add({
+                          'tag': tag,
+                          'manufacturer': manufacturer,
+                          'weight': weight,
+                          'health': condition,
+                          'date': date,
+                          'imageLink': image,
+                        });
+                        _manufacturerController.text = '';
+                        _weightController.text = '';
+                        _healthController.text = '';
+                        _dateController.text = '';
+                        _imageController.text = '';
+                      }
+                      ;
+                    })
+              ],
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,52 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: Dimensions.sizedBoxHeight10,
             ),
             //the major types of drones in the vertical scroll view
-            Expanded(
-              flex: 2,
-              child: StreamBuilder(
-                  stream: _Classifications.snapshots(),
-                  builder:
-                      (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                    if (streamSnapshot.hasData) {
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: streamSnapshot.data?.docs.length,
-                        itemBuilder: (context, index) {
-                          final DocumentSnapshot documentSnapshot =
-                              streamSnapshot.data!.docs[index];
-                          return Types(
-                              name: documentSnapshot['name'],
-                              link: documentSnapshot['image']);
-                        },
-                        // children: [
-                        //   Types(
-                        //     name: 'Fixed-Wing Hybrid VTOL.',
-                        //     link:
-                        //         'https://i0.wp.com/www.droneassemble.com/wp-content/uploads/2019/11/1-7.jpg?resize=1000%2C1000&ssl=1',
-                        //   ),
-                        //   Types(
-                        //     name: 'Single-Rotor Drones',
-                        //     link:
-                        //         'https://image.made-in-china.com/2f0j00OgvUPQBzYebp/12kg-Load-Full-Autonomous-Single-Rotor-Oil-Power-Plant-Protection-Drone.jpg',
-                        //   ),
-                        //   Types(
-                        //     name: 'Fixed-Wing Drones',
-                        //     link:
-                        //         'https://geo-matching.com/uploads/default/d/s/dsc07909.png',
-                        //   ),
-                        //   Types(
-                        //     name: 'Multi-Rotor Drones.',
-                        //     link:
-                        //         'https://www.researchgate.net/publication/337948739/figure/fig1/AS:844877071929344@1578445799169/Multi-rotor-UAV-6.ppm',
-                        //   ),
-                        // ],
-                      );
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-            ),
+            MajorDrones(Classifications: _Classifications),
             SizedBox(
               height: Dimensions.sizedBoxHeight40,
             ),
@@ -152,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          mainAxisExtent: 300),
+                                          mainAxisExtent: 350),
                                   itemCount: streamSnapshot.data?.docs.length,
                                   itemBuilder: (context, index) {
                                     final DocumentSnapshot documentSnapshot =
@@ -162,11 +296,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           color: Colors.grey),
-                                      padding: EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 20,
-                                          right: 10,
-                                          left: 10),
+                                      margin: const EdgeInsets.only(
+                                        right: 10,
+                                        left: 5,
+                                        bottom: 10,
+                                      ),
+                                      padding: const EdgeInsets.only(
+                                        top: 10,
+                                        bottom: 20,
+                                      ),
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -193,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text('ID:',
+                                                  const Text('ID:',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -205,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text('Weight:',
+                                                  const Text('Weight:',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -218,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text('Manufacturer:',
+                                                  const Text('Manufacturer:',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -231,7 +369,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text('Condition:',
+                                                  const Text('Condition:',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -244,7 +382,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text('D O A:',
+                                                  const Text('D O A:',
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -253,6 +391,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   ),
                                                 ],
                                               ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        await _details
+                                                            .doc(
+                                                                documentSnapshot!
+                                                                    .id)
+                                                            .delete();
+                                                      },
+                                                      icon: Icon(Icons.delete)),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        _update(
+                                                            documentSnapshot);
+                                                      },
+                                                      icon: Icon(Icons.edit)),
+                                                ],
+                                              )
                                             ],
                                           )
                                         ],
@@ -261,13 +421,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                   });
                         }
                         //for loading
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       })),
             ),
           ],
         ),
+      ),
+
+      //floating action button to create new doc
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _create(),
+        child: const Icon(Icons.add),
       ),
     );
   }

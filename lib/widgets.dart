@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -65,6 +66,43 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class MajorDrones extends StatelessWidget {
+  const MajorDrones({
+    Key? key,
+    required CollectionReference<Object?> Classifications,
+  })  : _Classifications = Classifications,
+        super(key: key);
+
+  final CollectionReference<Object?> _Classifications;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 2,
+      child: StreamBuilder(
+          stream: _Classifications.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: streamSnapshot.data?.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return Types(
+                      name: documentSnapshot['name'],
+                      link: documentSnapshot['image']);
+                },
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 }
