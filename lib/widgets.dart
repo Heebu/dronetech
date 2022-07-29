@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'dimensions.dart';
+
 class Types extends StatelessWidget {
   const Types({
     Key? key,
@@ -32,13 +34,15 @@ class Types extends StatelessWidget {
               link,
             ),
             fit: BoxFit.cover,
-            height: 120,
+            height: Dimensions.sizedBoxHeight100 + Dimensions.sizedBoxHeight20,
           ),
           Spacer(),
           Text(
             name,
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
+                fontWeight: FontWeight.bold,
+                fontSize: Dimensions.font16,
+                color: Colors.white),
           )
         ],
       ),
@@ -53,12 +57,16 @@ class SomethingWentWrong extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Oops, Something went wrong'),
+        child: Text(
+          'Oops, Something went wrong',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
 }
 
+//loading
 class Loading extends StatelessWidget {
   const Loading({Key? key}) : super(key: key);
 
@@ -70,7 +78,8 @@ class Loading extends StatelessWidget {
   }
 }
 
-class MajorDrones extends StatelessWidget {
+//major drones widget
+class MajorDrones extends StatefulWidget {
   const MajorDrones({
     Key? key,
     required CollectionReference<Object?> Classifications,
@@ -80,11 +89,16 @@ class MajorDrones extends StatelessWidget {
   final CollectionReference<Object?> _Classifications;
 
   @override
+  State<MajorDrones> createState() => _MajorDronesState();
+}
+
+class _MajorDronesState extends State<MajorDrones> {
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 2,
       child: StreamBuilder(
-          stream: _Classifications.snapshots(),
+          stream: widget._Classifications.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
               return ListView.builder(
@@ -93,9 +107,11 @@ class MajorDrones extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
-                  return Types(
-                      name: documentSnapshot['name'],
-                      link: documentSnapshot['image']);
+                  return Expanded(
+                    child: Types(
+                        name: documentSnapshot['name'],
+                        link: documentSnapshot['image']),
+                  );
                 },
               );
             }

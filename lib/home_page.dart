@@ -14,7 +14,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //firebase
   late final CollectionReference _details =
       FirebaseFirestore.instance.collection('details');
-  late final CollectionReference _Classifications =
+  late final CollectionReference _classifications =
       FirebaseFirestore.instance.collection('Classifications');
 
   final TextEditingController _tagController = TextEditingController();
@@ -41,10 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-              top: 20,
-              right: 20,
-              left: 20,
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+              top: Dimensions.sizedBoxHeight20,
+              right: Dimensions.width20,
+              left: Dimensions.width20,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom +
+                  Dimensions.sizedBoxHeight20,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -89,22 +90,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     final String date = _dateController.text;
                     final String image = _imageController.text;
 
-                    if (image != null) {
-                      await _details.doc(documentSnapshot!.id).update({
-                        'tag': tag,
-                        'manufacturer': manufacturer,
-                        'weight': weight,
-                        'health': condition,
-                        'date': date,
-                        'imageLink': image,
-                      });
-                      _tagController.text = '';
-                      _manufacturerController.text = '';
-                      _weightController.text = '';
-                      _healthController.text = '';
-                      _dateController.text = '';
-                      _imageController.text = '';
-                    }
+                    await _details.doc(documentSnapshot!.id).update({
+                      'tag': tag,
+                      'manufacturer': manufacturer,
+                      'weight': weight,
+                      'health': condition,
+                      'date': date,
+                      'imageLink': image,
+                    });
+                    _tagController.text = '';
+                    _manufacturerController.text = '';
+                    _weightController.text = '';
+                    _healthController.text = '';
+                    _dateController.text = '';
+                    _imageController.text = '';
                   },
                 )
               ],
@@ -131,10 +130,11 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-              top: 20,
-              right: 20,
-              left: 20,
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+              top: Dimensions.sizedBoxHeight20,
+              right: Dimensions.width20,
+              left: Dimensions.width20,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom +
+                  Dimensions.sizedBoxHeight20,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -178,22 +178,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       final String date = _dateController.text;
                       final String image = _imageController.text;
 
-                      if (image != null) {
-                        await _details.add({
-                          'tag': tag,
-                          'manufacturer': manufacturer,
-                          'weight': weight,
-                          'health': condition,
-                          'date': date,
-                          'imageLink': image,
-                        });
-                        _manufacturerController.text = '';
-                        _weightController.text = '';
-                        _healthController.text = '';
-                        _dateController.text = '';
-                        _imageController.text = '';
-                      }
-                      ;
+                      await _details.add({
+                        'tag': tag,
+                        'manufacturer': manufacturer,
+                        'weight': weight,
+                        'health': condition,
+                        'date': date,
+                        'imageLink': image,
+                      });
+                      _manufacturerController.text = '';
+                      _weightController.text = '';
+                      _healthController.text = '';
+                      _dateController.text = '';
+                      _imageController.text = '';
                     })
               ],
             ),
@@ -244,7 +241,8 @@ class _MyHomePageState extends State<MyHomePage> {
               height: Dimensions.sizedBoxHeight10,
             ),
             //the major types of drones in the vertical scroll view
-            MajorDrones(Classifications: _Classifications),
+            MajorDrones(Classifications: _classifications),
+
             SizedBox(
               height: Dimensions.sizedBoxHeight40,
             ),
@@ -296,14 +294,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           color: Colors.grey),
-                                      margin: const EdgeInsets.only(
-                                        right: 10,
-                                        left: 5,
-                                        bottom: 10,
+                                      margin: EdgeInsets.only(
+                                        right: Dimensions.width10,
+                                        left: Dimensions.width5,
+                                        bottom: Dimensions.sizedBoxHeight10,
                                       ),
-                                      padding: const EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 20,
+                                      padding: EdgeInsets.only(
+                                        top: Dimensions.width10,
+                                        bottom: Dimensions.width20,
                                       ),
                                       child: Column(
                                         mainAxisAlignment:
@@ -311,8 +309,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                         children: [
                                           //image
                                           Container(
-                                            height: 150,
-                                            width: 150,
+                                            height:
+                                                Dimensions.sizedBoxHeight600 /
+                                                    4,
+                                            width: Dimensions.width100 +
+                                                Dimensions.width50,
                                             color: Colors.grey,
                                             child: Image(
                                                 image: NetworkImage(
@@ -335,7 +336,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  Text(documentSnapshot['tag']),
+                                                  Text(
+                                                    documentSnapshot['tag'],
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            Dimensions.font13),
+                                                  ),
                                                 ],
                                               ),
                                               Row(
@@ -347,8 +353,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  Text(documentSnapshot[
-                                                      'weight']),
+                                                  Text(
+                                                    documentSnapshot['weight'],
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            Dimensions.font13),
+                                                  ),
                                                 ],
                                               ),
                                               Row(
@@ -360,8 +370,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  Text(documentSnapshot[
-                                                      'manufacturer']),
+                                                  Text(
+                                                    documentSnapshot[
+                                                        'manufacturer'],
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            Dimensions.font13),
+                                                  ),
                                                 ],
                                               ),
                                               Row(
@@ -373,8 +388,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  Text(documentSnapshot[
-                                                      'health']),
+                                                  Text(
+                                                    documentSnapshot['health'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          Dimensions.font13,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                               Row(
@@ -388,6 +408,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               FontWeight.bold)),
                                                   Text(
                                                     documentSnapshot['date'],
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            Dimensions.font13),
                                                   ),
                                                 ],
                                               ),
@@ -400,17 +423,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       onPressed: () async {
                                                         await _details
                                                             .doc(
-                                                                documentSnapshot!
+                                                                documentSnapshot
                                                                     .id)
                                                             .delete();
                                                       },
-                                                      icon: Icon(Icons.delete)),
+                                                      icon: const Icon(
+                                                          Icons.delete)),
                                                   IconButton(
                                                       onPressed: () {
                                                         _update(
                                                             documentSnapshot);
                                                       },
-                                                      icon: Icon(Icons.edit)),
+                                                      icon: const Icon(
+                                                          Icons.edit)),
                                                 ],
                                               )
                                             ],

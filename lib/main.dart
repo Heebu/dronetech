@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
       future: Firebase.initializeApp(),
       builder: (context, snapshot) {
         // Check for errors
-        if (snapshot.hasError) {
-          return SomethingWentWrong();
-        }
+        // if (snapshot.hasError) {
+        //   return SomethingWentWrong();
+        // }
         // Once complete, show the application
         if (snapshot.connectionState == ConnectionState.done) {
           return GetMaterialApp(

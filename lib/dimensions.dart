@@ -6,11 +6,11 @@ class Dimensions {
   static double screenWidth = Get.context!.width; // width = 411.4
 
   //sizing to each screen it is  displayed to
-  static double pageView = screenHeight / 2.6;
-  static double pageViewContainer = screenHeight / 3.8;
-  static double pageViewTextContainer = screenHeight / 7.0;
+  // static double pageView = screenHeight / 2.6;
+  // static double pageViewContainer = screenHeight / 3.8;
+  // static double pageViewTextContainer = screenHeight / 7.0;
 
-  //height of the sizedbox, padding and margin resized
+  //height of the sized box, padding and margin resized
   static double sizedBoxHeight10 = screenHeight / 86.9;
   static double sizedBoxHeight5 = screenHeight / 173.7;
   static double sizedBoxHeight15 = screenHeight / 58;
@@ -42,6 +42,7 @@ class Dimensions {
   static double font16 = screenHeight / 52.8;
   static double font25 = screenHeight / 34.74;
   static double font26 = screenHeight / 32.5;
+  static double font13 = screenHeight / 66.8;
 
   //Border radius reduced
   static double radius10 = screenHeight / 84.4;
